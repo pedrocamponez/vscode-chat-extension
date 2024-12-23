@@ -6,33 +6,33 @@ import * as vscode from 'vscode';
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "chatextension" is now active!');
+    // Use the console to output diagnostic information (console.log) and errors (console.error)
+    // This line of code will only be executed once when your extension is activated
+    console.log('Congratulations, your extension "chatextension" is now active!');
 
-	context.subscriptions.push(
-		vscode.commands.registerCommand('chatextension.openChat', () => {
-			const panel = vscode.window.createWebviewPanel(
-				'chatPanel',
-				'GPT-Pilot Chat',
-				vscode.ViewColumn.One,
-				{ enableScripts: true }
-			)
+    context.subscriptions.push(
+        vscode.commands.registerCommand('chatextension.openChat', () => {
+            const panel = vscode.window.createWebviewPanel(
+                'chatPanel',
+                'GPT-Pilot Chat',
+                vscode.ViewColumn.One,
+                { enableScripts: true }
+            )
 
-			panel.webview.html = getWebViewContent();
-		})
-	)
+            panel.webview.html = getWebViewContent();
+        })
+    )
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('chatextension.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from ChatExtension!');
-	});
+    // The command has been defined in the package.json file
+    // Now provide the implementation of the command with registerCommand
+    // The commandId parameter must match the command field in package.json
+    const disposable = vscode.commands.registerCommand('chatextension.helloWorld', () => {
+        // The code you place here will be executed every time your command is executed
+        // Display a message box to the user
+        vscode.window.showInformationMessage('Hello World from ChatExtension!');
+    });
 
-	context.subscriptions.push(disposable);
+    context.subscriptions.push(disposable);
 }
 
 // function getWebViewContent(panel: vscode.WebviewPanel): string {
@@ -80,14 +80,15 @@ export function activate(context: vscode.ExtensionContext) {
 //             }
 
 //             .message.user {
-//                 background-color: #4DDDFF; /* Gradient start for user */
-//                 align-self: flex-end;
+//                 background-color: #FDF3E5; /* User message background */
+//                 align-self: flex-end; /* Align to the right */
 //                 color: #000;
 //             }
 
 //             .message.bot {
-//                 background-color: #555D58; /* Bot message background */
-//                 align-self: flex-start;
+//                 background-color: #EA7100; /* Bot message background */
+//                 align-self: flex-start; /* Align to the left */
+//                 color: #FFF;
 //             }
 
 //             #input-container {
@@ -111,18 +112,18 @@ export function activate(context: vscode.ExtensionContext) {
 //                 padding: 10px 20px;
 //                 border: none;
 //                 border-radius: 8px;
-//                 background: linear-gradient(90deg, #4DDDFF, #11E9FE, #00FEFB);
-//                 color: #000;
+//                 background-color: #EA7100; /* Button color */
+//                 color: #FFF;
 //                 cursor: pointer;
 //                 font-size: 14px;
 //             }
 
 //             #send:hover {
-//                 background: linear-gradient(90deg, #00FEFB, #11E9FE, #4DDDFF); /* Hover effect */
+//                 background-color: #D66300; /* Darker shade for hover */
 //             }
 
 //             #send:disabled {
-//                 background: #555D58;
+//                 background-color: #555D58;
 //                 cursor: not-allowed;
 //             }
 //         </style>
@@ -141,6 +142,9 @@ export function activate(context: vscode.ExtensionContext) {
 //             const inputBox = document.getElementById('input');
 //             const sendButton = document.getElementById('send');
 
+//             // Add a default welcome message
+//             addMessage("Oi, bem vindo! Vamos desenvolver juntos?", 'bot');
+
 //             // Handle send button click
 //             sendButton.addEventListener('click', () => {
 //                 const text = inputBox.value.trim();
@@ -148,12 +152,11 @@ export function activate(context: vscode.ExtensionContext) {
 //                 vscode.postMessage({ text });
 //                 addMessage(text, 'user');
 //                 inputBox.value = '';
-//             });
 
-//             // Handle messages from the backend
-//             window.addEventListener('message', (event) => {
-//                 const message = event.data;
-//                 addMessage(message.text, 'bot');
+//                 // Add default bot reply for now
+//                 setTimeout(() => {
+//                     addMessage("Oi, bem vindo! Vamos desenvolver juntos?", 'bot');
+//                 }, 1000);
 //             });
 
 //             // Add message to the chat
@@ -170,7 +173,7 @@ export function activate(context: vscode.ExtensionContext) {
 // }
 
 function getWebViewContent(panel: vscode.WebviewPanel): string {
-	return `
+    return `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -203,6 +206,9 @@ function getWebViewContent(panel: vscode.WebviewPanel): string {
                 margin-bottom: 10px;
                 border-radius: 5px;
                 background-color: #2A2E2E; /* Secondary dark */
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
             }
 
             .message {
@@ -303,7 +309,7 @@ function getWebViewContent(panel: vscode.WebviewPanel): string {
             }
         </script>
     </body>
-    </html>`;
+    </html>`
 }
 
 // This method is called when your extension is deactivated
