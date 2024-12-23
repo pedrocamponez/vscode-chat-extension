@@ -19,7 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
                 { enableScripts: true }
             )
 
-            panel.webview.html = getWebViewContent();
+            panel.webview.html = getWebViewContent(panel);
         })
     )
 
@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 // function getWebViewContent(panel: vscode.WebviewPanel): string {
-// 	return `
+//     return `
 //     <!DOCTYPE html>
 //     <html lang="en">
 //     <head>
@@ -69,6 +69,9 @@ export function activate(context: vscode.ExtensionContext) {
 //                 margin-bottom: 10px;
 //                 border-radius: 5px;
 //                 background-color: #2A2E2E; /* Secondary dark */
+//                 display: flex;
+//                 flex-direction: column;
+//                 gap: 10px;
 //             }
 
 //             .message {
@@ -169,8 +172,9 @@ export function activate(context: vscode.ExtensionContext) {
 //             }
 //         </script>
 //     </body>
-//     </html>`;
+//     </html>`
 // }
+
 
 function getWebViewContent(panel: vscode.WebviewPanel): string {
     return `
@@ -286,7 +290,18 @@ function getWebViewContent(panel: vscode.WebviewPanel): string {
             addMessage("Oi, bem vindo! Vamos desenvolver juntos?", 'bot');
 
             // Handle send button click
-            sendButton.addEventListener('click', () => {
+            sendButton.addEventListener('click', sendMessage);
+
+            // Handle Enter key press
+            inputBox.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault(); // Prevent default form submission behavior
+                    sendMessage();
+                }
+            });
+
+            // Send the message
+            function sendMessage() {
                 const text = inputBox.value.trim();
                 if (!text) return;
                 vscode.postMessage({ text });
@@ -297,7 +312,7 @@ function getWebViewContent(panel: vscode.WebviewPanel): string {
                 setTimeout(() => {
                     addMessage("Oi, bem vindo! Vamos desenvolver juntos?", 'bot');
                 }, 1000);
-            });
+            }
 
             // Add message to the chat
             function addMessage(text, type) {
